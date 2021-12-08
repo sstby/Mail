@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // By default, load the inbox
   load_mailbox('inbox');
   
-  //Блокировка отправки сообщение до введение тела сообщения
+  //Блокировка отправки сообщение до введения тела сообщения
   const form_submit = document.querySelector('#submit');
   const form_body = document.querySelector('#compose-body');
   form_submit.disabled = true;
@@ -51,16 +51,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 });
-function opposite_bolleand(cond) {
-  let res;
-  if (cond == true) {
-    res = false;
-  }
-  else {
-    res = true;
-  }
-  return res;
-}
+
+//Отправка формы
 function submit_composed_email(e) {
   e.preventDefault();
   let recipients = document.querySelector('#compose-recipients');
@@ -79,6 +71,8 @@ function submit_composed_email(e) {
   })
   load_mailbox('sent');
 }
+
+//Загрузка формы
 function compose_email(recipient=null, subject=null, body=null) {
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
@@ -124,9 +118,10 @@ function make_message_view(message){
   div.addEventListener('click', function() {
       load_message(message.id);
   });
-  //document.querySelector('.container').append(div);
   return div;
 }
+
+//Загрузка сообщения
 function load_message(message_id) {
   document.querySelector('#message-view').style.display = 'block';
   document.querySelector('#emails-view').style.display = 'none';
@@ -142,6 +137,10 @@ function load_message(message_id) {
   fetch(query)
   .then(response => response.json())
   .then(email => {
+    if (document.querySelector('h2').innerText == email.sender) {
+      document.querySelector('#message-controls').style.display = 'none';
+    }
+
     let message_block = document.querySelector('#message-view');
     let message = document.createElement('div');
     message.setAttribute('id', 'read-message');
@@ -189,6 +188,7 @@ function load_message(message_id) {
   
 }
 
+//Загрузка ящика
 function load_mailbox(mailbox) {
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
